@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>See the Science — Limitless BioLabs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D0B10;
+    --bg-raised:#161320;
+    --bg-card:#18151F;
+    --ink:#F5F3F7;
+    --primary:#FF5F3E;      /* coral — energy, individuals */
+    --primary-dark:#E44B2C;
+    --secondary:#35D6C4;    /* bio-cyan — science, medspas */
+    --violet:#9B7BFF;       /* physicians */
+    --line:#29252F;
+    --muted:#9D97A8;
+    --white:#FFFFFF;
+    --display:'Space Grotesk', 'Arial Black', sans-serif;
+    --sans:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --max:1160px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit;}
+  img,svg{display:block; max-width:100%;}
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 32px;}
+
+  h1,h2,h3{
+    font-family:var(--display);
+    font-weight:700;
+    line-height:1.02;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  p{margin:0 0 16px 0; max-width:60ch;}
+  p:last-child{margin-bottom:0;}
+
+  .eyebrow-rule{display:flex; align-items:center; gap:10px; margin-bottom:14px;}
+  .eyebrow-rule .stub{width:28px; height:2px; background:var(--primary);}
+  .eyebrow-rule span{font-size:13.5px; color:var(--muted); font-weight:600; font-family:var(--sans);}
+
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--secondary);
+    outline-offset:3px;
+    border-radius:2px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(13,11,16,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:var(--max); margin:0 auto;}
+  .wordmark{
+    font-family:var(--display); font-size:20px; font-weight:700;
+    display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink);
+    letter-spacing:-0.01em;
+  }
+  .wordmark .mark{
+    width:26px; height:26px; border-radius:7px;
+    background:linear-gradient(135deg, var(--primary), var(--violet));
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:700; color:var(--bg);
+  }
+  nav.links{display:flex; gap:30px; align-items:center;}
+  nav.links a.navlink{
+    text-decoration:none; color:var(--ink); font-size:14.5px; font-weight:500;
+    padding-bottom:2px; border-bottom:1px solid transparent; transition:border-color .15s ease, color .15s ease;
+  }
+  nav.links a.navlink:hover{border-bottom-color:var(--secondary); color:var(--secondary);}
+  .btn{
+    display:inline-block; text-decoration:none; font-family:var(--sans); font-weight:600; font-size:14.5px;
+    padding:12px 22px; border-radius:6px; cursor:pointer; border:1px solid transparent;
+    transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary{background:var(--primary); color:var(--white); box-shadow:0 0 0 0 rgba(255,95,62,0);}
+  .btn-primary:hover{background:var(--primary-dark); box-shadow:0 4px 24px -6px rgba(255,95,62,0.55);}
+  .btn-ghost{background:transparent; color:var(--ink); border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--secondary); color:var(--secondary);}
+  .btn:active{transform:scale(0.98);}
+  .menu-toggle{display:none; background:none; border:none; cursor:pointer; padding:6px;}
+  .menu-toggle span{display:block; width:22px; height:2px; background:var(--ink); margin:5px 0;}
+
+  .nav-logo{height:30px; width:auto; display:block;}
+  .wordmark .mark{display:none;}
+
+  .brand-header{background:#FFFFFF; padding:22px 0; border-bottom:1px solid var(--line);}
+  .brand-header-inner{display:flex; justify-content:center; align-items:center;}
+  .brand-lockup{height:96px; width:auto;}
+  @media (max-width:600px){ .brand-lockup{height:72px;} }
+
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative; padding:100px 0 70px; overflow:hidden;}
+  .hero::before{
+    content:''; position:absolute; top:-220px; right:-180px; width:640px; height:640px; border-radius:50%;
+    background:conic-gradient(from 90deg, var(--primary), var(--violet), var(--secondary), var(--primary));
+    filter:blur(110px); opacity:0.35;
+    animation:orbit 16s linear infinite;
+    z-index:0;
+  }
+  @keyframes orbit{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+
+  .hero-inner{position:relative; z-index:1; opacity:0; transform:translateY(16px); animation:rise .8s ease forwards;}
+  @keyframes rise{ to{opacity:1; transform:translateY(0);} }
+
+  .hero-grid{display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:center;}
+  .hero h1{font-size:clamp(40px, 5.4vw, 66px); max-width:13ch; margin-bottom:22px;}
+  .hero h1 .accent{color:var(--primary);}
+  .hero .sub{font-size:18px; color:var(--muted); max-width:46ch; margin-bottom:32px;}
+  .hero .tagline{font-family:var(--display); font-size:15px; font-weight:600; text-transform:uppercase; letter-spacing:0.12em; color:var(--secondary); margin:0 0 18px 0;}
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:36px;}
+
+  .trust-inline{display:flex; gap:24px; flex-wrap:wrap; font-size:13.5px; color:var(--muted);}
+  .trust-inline .item{display:flex; align-items:center; gap:8px;}
+  .trust-inline svg{width:16px; height:16px; flex:none; color:var(--secondary);}
+
+  .stat-card{
+    background:var(--bg-card); border:1px solid var(--line); border-radius:10px; padding:26px;
+    display:flex; flex-direction:column; gap:18px;
+  }
+  .stat-row{display:flex; justify-content:space-between; align-items:baseline;}
+  .stat-num{font-family:var(--display); font-size:30px; font-weight:700; color:var(--secondary);}
+  .stat-label{font-size:12.5px; color:var(--muted); max-width:12ch; text-align:right;}
+
+  /* ---------- Trust strip ---------- */
+  .trust-strip{background:var(--bg-raised); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:26px 0;}
+  .trust-strip .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px;}
+  .trust-strip .row{display:flex; align-items:center; gap:10px; font-size:14px; font-weight:500;}
+  .trust-strip svg{width:19px; height:19px; color:var(--secondary); flex:none;}
+
+  /* ---------- Section shell ---------- */
+  section{padding:92px 0;}
+  section.tight{padding:64px 0;}
+
+  /* ---------- Pathways ---------- */
+  .path-row{display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px; align-items:center; padding:56px 0; border-bottom:1px solid var(--line);}
+  .path-row:last-child{border-bottom:none;}
+  .path-row.reverse{grid-template-columns:1.1fr 0.9fr;}
+  .path-row.reverse .path-text{order:2;}
+  .path-row.reverse .path-art{order:1;}
+
+  .path-tag{display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:14px;}
+  .path-row[data-c="primary"] .path-tag{color:var(--primary);}
+  .path-row[data-c="secondary"] .path-tag{color:var(--secondary);}
+  .path-row[data-c="violet"] .path-tag{color:var(--violet);}
+
+  .path-text h3{font-size:clamp(27px,3.2vw,36px); margin-bottom:14px; max-width:15ch;}
+  .path-text p{color:var(--muted); font-size:16px; margin-bottom:20px;}
+  .path-points{list-style:none; margin:0 0 26px; padding:0;}
+  .path-points li{display:flex; gap:10px; align-items:flex-start; font-size:15px; color:var(--ink); margin-bottom:11px;}
+  .path-points svg{width:16px; height:16px; margin-top:3px; flex:none;}
+  .path-row[data-c="primary"] .path-points svg{color:var(--primary);}
+  .path-row[data-c="secondary"] .path-points svg{color:var(--secondary);}
+  .path-row[data-c="violet"] .path-points svg{color:var(--violet);}
+
+  .path-art{
+    background:var(--bg-card); border:1px solid var(--line); border-radius:14px; padding:32px;
+    display:flex; align-items:center; justify-content:center; min-height:260px; position:relative; overflow:hidden;
+  }
+  .path-art::before{
+    content:''; position:absolute; inset:0; opacity:0.14;
+  }
+  .path-row[data-c="primary"] .path-art::before{background:radial-gradient(circle at 30% 30%, var(--primary), transparent 60%);}
+  .path-row[data-c="secondary"] .path-art::before{background:radial-gradient(circle at 30% 30%, var(--secondary), transparent 60%);}
+  .path-row[data-c="violet"] .path-art::before{background:radial-gradient(circle at 30% 30%, var(--violet), transparent 60%);}
+  .path-art svg{width:100%; height:auto; max-height:220px; position:relative; z-index:1;}
+
+  .path-art.path-photo{padding:0; overflow:hidden;}
+  .path-art.path-photo img{width:100%; height:100%; min-height:260px; object-fit:cover; display:block; position:relative; z-index:0;}
+  .path-row[data-c="primary"] .path-art.path-photo::before{background:linear-gradient(160deg, rgba(255,95,62,0.35), rgba(13,11,16,0.55)); z-index:1; opacity:1;}
+  .path-row[data-c="secondary"] .path-art.path-photo::before{background:linear-gradient(160deg, rgba(53,214,196,0.30), rgba(13,11,16,0.55)); z-index:1; opacity:1;}
+  .path-row[data-c="violet"] .path-art.path-photo::before{background:linear-gradient(160deg, rgba(155,123,255,0.32), rgba(13,11,16,0.55)); z-index:1; opacity:1;}
+
+
+  /* ---------- Goal categories ---------- */
+  .goals-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+  .goal-cell{background:var(--bg-card); padding:30px 24px; min-height:170px; display:flex; flex-direction:column; justify-content:space-between; transition:background .2s ease, transform .15s ease; text-decoration:none; color:var(--ink);}
+  .goal-cell:hover{background:var(--bg-raised); transform:translateY(-2px);}
+  .goal-cell svg{width:26px; height:26px; color:var(--secondary); margin-bottom:20px;}
+  .goal-cell h4{font-family:var(--display); font-size:19px; font-weight:700; margin:0 0 6px;}
+  .goal-cell span{font-size:13.5px; color:var(--muted); display:block;}
+  .goal-cell .goal-cta{font-size:12.5px; color:var(--primary); font-weight:600; margin-top:14px;}
+
+  /* ---------- Lead magnet ---------- */
+  .magnet{
+    background:linear-gradient(135deg, #1B1224, #150F1C 60%);
+    border:1px solid var(--line);
+    border-radius:16px; padding:56px;
+    display:grid; grid-template-columns:1.2fr 1fr; gap:48px; align-items:center;
+    position:relative; overflow:hidden;
+  }
+  .magnet::after{
+    content:''; position:absolute; bottom:-140px; left:-100px; width:360px; height:360px; border-radius:50%;
+    background:var(--primary); filter:blur(120px); opacity:0.25;
+  }
+  .magnet > *{position:relative; z-index:1;}
+  .magnet h2{color:var(--ink); font-size:clamp(26px,3vw,32px); max-width:16ch; margin-bottom:14px;}
+  .magnet p{color:var(--muted); font-size:15.5px;}
+  .magnet-form{background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:28px;}
+  .magnet-form .field{margin-bottom:14px;}
+  .magnet-form label{display:block; font-size:13px; font-weight:600; color:var(--ink); margin-bottom:6px;}
+  .magnet-form input, .magnet-form select{
+    width:100%; padding:11px 13px; font-family:var(--sans); font-size:14.5px;
+    border:1px solid var(--line); border-radius:6px; background:var(--bg-raised); color:var(--ink);
+  }
+  .magnet-form button{width:100%; justify-content:center; margin-top:4px;}
+  .form-note{font-size:12px; color:var(--muted); margin-top:12px;}
+  .form-success{display:none; background:var(--bg-raised); border:1px solid var(--secondary); border-radius:8px; padding:16px; font-size:14px; color:var(--ink);}
+  .form-success.show{display:block;}
+  .magnet-form form.hide{display:none;}
+
+  /* ---------- Contact ---------- */
+  .contact-shell{display:grid; grid-template-columns:0.85fr 1.15fr; gap:56px;}
+  .contact-copy h2{font-size:clamp(28px,3.4vw,36px); margin-bottom:16px; max-width:14ch;}
+  .contact-copy p{color:var(--muted); margin-bottom:24px;}
+  .contact-list{list-style:none; margin:0; padding:0;}
+  .contact-list li{padding:14px 0; border-top:1px solid var(--line); font-size:14.5px; color:var(--muted);}
+  .contact-list li:last-child{border-bottom:1px solid var(--line);}
+  .contact-list strong{color:var(--ink); display:block; font-weight:600; margin-bottom:2px; font-family:var(--display);}
+
+  .contact-form{background:var(--bg-card); border:1px solid var(--line); border-radius:14px; padding:36px;}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .contact-form .field{margin-bottom:16px;}
+  .contact-form label{display:block; font-size:13px; font-weight:600; margin-bottom:6px;}
+  .contact-form input, .contact-form select, .contact-form textarea{
+    width:100%; padding:11px 13px; font-family:var(--sans); font-size:14.5px;
+    border:1px solid var(--line); border-radius:6px; background:var(--bg-raised); color:var(--ink);
+  }
+  .contact-form textarea{resize:vertical; min-height:90px;}
+
+  /* ---------- Compliance ---------- */
+  .compliance{background:var(--bg-raised); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .compliance-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:40px;}
+  .compliance-grid h4{font-family:var(--display); font-size:18px; margin-bottom:8px; font-weight:700;}
+  .compliance-grid p{font-size:14px; color:var(--muted);}
+
+  /* ---------- Footer ---------- */
+  footer{padding:56px 0 36px;}
+  .footer-top{display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:32px; padding-bottom:32px; border-bottom:1px solid var(--line); margin-bottom:24px;}
+  .footer-cols{display:flex; gap:56px; flex-wrap:wrap;}
+  .footer-brand{display:flex; flex-direction:column;}
+  .footer-tagline{font-size:13px; color:var(--muted); margin:8px 0 0 0; font-weight:500;}
+  .footer-col h5{font-size:12.5px; font-weight:700; margin:0 0 12px; color:var(--muted); letter-spacing:0.03em; text-transform:uppercase;}
+  .footer-col ul{list-style:none; margin:0; padding:0;}
+  .footer-col li{margin-bottom:9px;}
+  .footer-col a{text-decoration:none; font-size:14.5px; color:var(--ink);}
+  .footer-col a:hover{color:var(--secondary);}
+  .footer-bottom{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:13px; color:var(--muted);}
+  .disclaimer-box{font-size:12.5px; color:var(--muted); max-width:none; margin-bottom:24px; padding:16px 18px; background:var(--bg-raised); border:1px solid var(--line); border-radius:8px;}
+
+  /* ---------- Responsive ---------- */
+
+  /* Partner Tiers */
+  .tiers-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .tier-card{background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:28px;}
+  .tier-featured{border-color:var(--primary); box-shadow:0 0 0 1px var(--primary);}
+  .tier-label{font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px;}
+  .tier-title{font-family:var(--display); font-size:21px; font-weight:700; margin:0 0 10px;}
+  .tier-desc{font-size:14px; color:var(--muted); margin-bottom:16px;}
+  .tier-list{list-style:none; margin:0; padding:0;}
+  .tier-list li{font-size:13.5px; color:var(--ink); padding:8px 0; border-top:1px solid var(--line);}
+
+  /* Testimonials */
+  .testimonial-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .testimonial-card{background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:26px;}
+  .testimonial-avatar{
+    width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-weight:700; font-size:14px; color:var(--bg); margin-bottom:16px;
+  }
+  .testimonial-quote{font-size:14.5px; color:var(--ink); margin-bottom:14px; font-style:italic;}
+  .testimonial-name{font-size:13px; color:var(--muted); font-weight:600;}
+
+  /* FAQ */
+  .faq-list{display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+  .faq-item{background:var(--bg-card); padding:18px 22px;}
+  .faq-item summary{
+    cursor:pointer; font-family:var(--display); font-weight:600; font-size:15.5px; color:var(--ink);
+    list-style:none; display:flex; justify-content:space-between; align-items:center;
+  }
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{content:'+'; font-size:20px; color:var(--secondary); margin-left:12px; flex:none;}
+  .faq-item[open] summary::after{content:'\2212';}
+  .faq-item p{margin-top:12px; font-size:14px; color:var(--muted);}
+
+  @media (max-width:880px){
+    .tiers-grid, .testimonial-grid{grid-template-columns:1fr;}
+  }
+
+
+  /* Peptide Library */
+  .lib-panel{background:var(--bg-card); border:1px solid var(--line); border-left-width:3px; border-radius:10px; padding:28px 30px; margin-bottom:20px; scroll-margin-top:90px;}
+  .lib-panel[data-c="primary"]{border-left-color:var(--primary);}
+  .lib-panel[data-c="secondary"]{border-left-color:var(--secondary);}
+  .lib-panel[data-c="violet"]{border-left-color:var(--violet);}
+  .lib-panel-head{display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:10px; margin-bottom:20px;}
+  .lib-panel-head h3{font-family:var(--display); font-size:22px; font-weight:700; margin:0;}
+  .lib-back{font-size:13px; color:var(--muted); text-decoration:none; font-weight:500;}
+  .lib-back:hover{color:var(--secondary);}
+  .lib-cols{display:grid; grid-template-columns:1fr 1fr; gap:32px;}
+  .lib-cols h5{font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); margin:0 0 12px;}
+  .lib-list{list-style:none; margin:0; padding:0;}
+  .lib-list li{padding:12px 0; border-top:1px solid var(--line);}
+  .lib-list li:first-child{border-top:none;}
+  .lib-name{display:block; font-weight:600; font-size:14.5px; color:var(--ink); margin-bottom:3px;}
+  .lib-blurb{display:block; font-size:13px; color:var(--muted); line-height:1.5;}
+
+  @media (max-width:880px){
+    .lib-cols{grid-template-columns:1fr;}
+  }
+
+  @media (max-width: 880px){
+    nav.links{display:none;}
+    .menu-toggle{display:block;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-art{order:-1;}
+    .path-row, .path-row.reverse{grid-template-columns:1fr; gap:28px;}
+    .path-row.reverse .path-text, .path-row.reverse .path-art{order:0;}
+    .goals-grid{grid-template-columns:repeat(2,1fr);}
+    .magnet{grid-template-columns:1fr; padding:32px;}
+    .contact-shell{grid-template-columns:1fr;}
+    .compliance-grid{grid-template-columns:1fr; gap:24px;}
+    .form-row{grid-template-columns:1fr;}
+    .footer-top{flex-direction:column;}
+  }
+
+  /* Sub-page hero */
+  .subhero{padding:60px 0 50px; position:relative; overflow:hidden;}
+  .subhero::before{
+    content:''; position:absolute; top:-200px; right:-160px; width:520px; height:520px; border-radius:50%;
+    background:conic-gradient(from 90deg, var(--primary), var(--violet), var(--secondary), var(--primary));
+    filter:blur(110px); opacity:0.28; z-index:0;
+  }
+  .subhero .wrap{position:relative; z-index:1;}
+  .subhero h1{font-size:clamp(32px,4.4vw,48px); max-width:18ch; margin-bottom:16px;}
+  .subhero p.lead{font-size:17px; color:var(--muted); max-width:60ch;}
+  .breadcrumb{font-size:13px; color:var(--muted); margin-bottom:18px;}
+  .breadcrumb a{color:var(--secondary); text-decoration:none;}
+  .breadcrumb a:hover{text-decoration:underline;}
+
+  .notice-box{
+    background:var(--bg-card); border:1px solid var(--line); border-left:3px solid var(--secondary);
+    border-radius:8px; padding:18px 22px; font-size:14px; color:var(--muted); margin:0 0 40px;
+  }
+  .notice-box strong{color:var(--ink);}
+
+  /* Protocol cards */
+  .protocol-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:56px;}
+  .protocol-card{background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:26px; border-top:3px solid var(--line);}
+  .protocol-card[data-c="primary"]{border-top-color:var(--primary);}
+  .protocol-card[data-c="secondary"]{border-top-color:var(--secondary);}
+  .protocol-card[data-c="violet"]{border-top-color:var(--violet);}
+  .protocol-goal{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); margin-bottom:8px;}
+  .protocol-title{font-family:var(--display); font-size:19px; font-weight:700; margin:0 0 10px;}
+  .protocol-rationale{font-size:14px; color:var(--muted); margin-bottom:14px; line-height:1.6;}
+  .protocol-bestfor{font-size:13px; color:var(--ink); background:var(--bg-raised); border-radius:6px; padding:10px 14px; margin-bottom:16px;}
+  .protocol-bestfor b{color:var(--secondary);}
+  .protocol-card .btn{font-size:13px; padding:9px 16px;}
+
+  .section-heading{font-size:clamp(24px,3vw,30px); margin-bottom:12px; max-width:22ch;}
+  .section-sub{color:var(--muted); font-size:14.5px; margin-bottom:32px; max-width:64ch;}
+
+  /* Science mechanism blocks */
+  .mech-grid{display:grid; grid-template-columns:1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; margin-bottom:56px;}
+  .mech-row{background:var(--bg-card); padding:24px 26px; display:grid; grid-template-columns:220px 1fr; gap:24px; align-items:start;}
+  .mech-row h4{font-family:var(--display); font-size:17px; font-weight:700; margin:0; color:var(--secondary);}
+  .mech-row p{font-size:14.5px; color:var(--muted); margin:0;}
+
+  .regstatus-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:56px;}
+  .regstatus-card{background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:24px;}
+  .regstatus-card h4{font-family:var(--display); font-size:16px; margin:0 0 10px;}
+  .regstatus-card p{font-size:13.5px; color:var(--muted);}
+
+  .cta-band{
+    background:linear-gradient(135deg, #1B1224, #150F1C 60%); border:1px solid var(--line); border-radius:16px;
+    padding:44px; text-align:center; margin-bottom:20px;
+  }
+  .cta-band h3{font-family:var(--display); font-size:24px; margin:0 0 10px;}
+  .cta-band p{color:var(--muted); font-size:14.5px; margin:0 0 22px;}
+
+  @media (max-width:880px){
+    .protocol-grid{grid-template-columns:1fr;}
+    .mech-row{grid-template-columns:1fr;}
+    .regstatus-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="index.html" class="wordmark"><img src="assets/logo-icon.png" alt="Limitless BioLabs" class="nav-logo">Limitless BioLabs</a>
+    <nav class="links">
+      <a class="navlink" href="index.html#individuals">Individuals</a>
+      <a class="navlink" href="index.html#medspas">MedSpas</a>
+      <a class="navlink" href="index.html#physicians">Physicians</a>
+      <a class="navlink" href="index.html#faq">FAQ</a>
+      <a href="index.html#contact" class="btn btn-primary">Get Started</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="subhero">
+    <div class="wrap">
+      <div class="breadcrumb"><a href="index.html">Home</a> / See the Science</div>
+      <h1>See the Science</h1>
+      <p class="lead">A plain-language look at how these peptides actually work, and why regulatory status varies so much across the category — so you know what you're evaluating.</p>
+    </div>
+  </section>
+
+  <section class="tight">
+    <div class="wrap">
+
+      <div class="eyebrow-rule"><div class="stub"></div><span>Mechanisms, briefly</span></div>
+      <h2 class="section-heading">How Each Category Works</h2>
+      <p class="section-sub">Every category on this site works through a distinct biological pathway — they are not interchangeable, and combining categories (stacking) is about targeting more than one pathway at once, not stacking the same effect twice.</p>
+      <div class="mech-grid">
+        <div class="mech-row">
+          <h4>GLP-1 / GIP Agonists</h4>
+          <p>Semaglutide, tirzepatide, and retatrutide mimic incretin hormones, slowing gastric emptying and suppressing appetite via receptors in the gut and brain. This is a deficit-driven mechanism — the weight loss comes from eating less, which is why lean-mass loss is a real trade-off without a resistance-training and protein-intake plan.</p>
+        </div>
+        <div class="mech-row">
+          <h4>GH Secretagogues</h4>
+          <p>CJC-1295, Ipamorelin, Sermorelin, and Tesamorelin stimulate the pituitary gland to release growth hormone, raising GH and IGF-1. This pathway is inherently protein-sparing (anabolic) rather than deficit-driven, which is why it tends to preserve or add lean mass instead of depleting it.</p>
+        </div>
+        <div class="mech-row">
+          <h4>Tissue-Repair Peptides</h4>
+          <p>BPC-157 and TB-500 are associated with promoting blood vessel formation (angiogenesis), cell migration to injury sites, and reduced local inflammation — the proposed mechanisms behind their use for tendon, ligament, and soft-tissue recovery.</p>
+        </div>
+        <div class="mech-row">
+          <h4>Mitochondrial &amp; Coenzyme Pathways</h4>
+          <p>NAD+ is a coenzyme essential for mitochondrial ATP production and DNA repair, with levels that decline with age. MOTS-c is encoded in mitochondrial DNA and is associated with how cells respond to metabolic stress — together they're framed as addressing cellular energy from two different angles.</p>
+        </div>
+        <div class="mech-row">
+          <h4>Nootropic Peptides</h4>
+          <p>Semax and Selank are studied for effects on BDNF (brain-derived neurotrophic factor) signaling and stress-hormone regulation, which is the proposed basis for their reported focus and anxiety-reduction effects.</p>
+        </div>
+      </div>
+
+      <div class="eyebrow-rule"><div class="stub"></div><span>Decision-relevant comparison</span></div>
+      <h2 class="section-heading">GLP-1s vs. GH Secretagogues</h2>
+      <p class="section-sub">The two most-requested categories solve different problems — this is the comparison that actually matters when choosing between them.</p>
+      <div class="mech-grid" style="grid-template-columns:1fr;">
+        <div class="mech-row" style="grid-template-columns:180px 1fr 1fr;">
+          <h4 style="color:var(--ink);">&nbsp;</h4>
+          <p style="font-weight:700; color:var(--primary);">GLP-1s (Semaglutide, Tirzepatide, Retatrutide)</p>
+          <p style="font-weight:700; color:var(--secondary);">GH Secretagogues (Ipamorelin, Tesamorelin)</p>
+        </div>
+        <div class="mech-row" style="grid-template-columns:180px 1fr 1fr;">
+          <h4>Mechanism</h4>
+          <p>Appetite suppression + slowed gastric emptying; deficit-driven overall.</p>
+          <p>Raises GH/IGF-1; increases lipolysis, is protein-sparing/anabolic.</p>
+        </div>
+        <div class="mech-row" style="grid-template-columns:180px 1fr 1fr;">
+          <h4>Total weight loss</h4>
+          <p>Substantial — the largest effect of anything in this category.</p>
+          <p>Modest overall weight change; more about fat redistribution than the scale.</p>
+        </div>
+        <div class="mech-row" style="grid-template-columns:180px 1fr 1fr;">
+          <h4>Muscle effect</h4>
+          <p>Risk of lean-mass loss without a training and protein plan.</p>
+          <p>Tends to preserve or slightly increase lean mass — the category's main appeal.</p>
+        </div>
+      </div>
+
+      <div class="eyebrow-rule"><div class="stub"></div><span>Why regulatory status varies</span></div>
+      <h2 class="section-heading">Regulatory Status Matters</h2>
+      <p class="section-sub">Not everything in this category is regulated the same way — knowing which bucket a peptide falls into changes what you should expect and ask for.</p>
+      <div class="regstatus-grid">
+        <div class="regstatus-card">
+          <h4>FDA-Approved Drugs</h4>
+          <p>Semaglutide, tirzepatide, and tesamorelin have FDA-approved branded versions for specific indications (diabetes, weight management, HIV-associated lipodystrophy). The strongest evidence base in this category.</p>
+        </div>
+        <div class="regstatus-card">
+          <h4>Compounded Preparations</h4>
+          <p>Versions of approved drugs (and some other peptides) prepared by licensed 503A or 503B pharmacies under their own regulatory framework — including our 503A partner, Stryker Pharmacy — not the same as an FDA-approved commercial product, but produced under pharmacy oversight.</p>
+        </div>
+        <div class="regstatus-card">
+          <h4>Investigational / Research-Use</h4>
+          <p>Compounds like retatrutide are still in clinical trials and not yet FDA-approved for any use. Many peptides (BPC-157, TB-500, most GH secretagogues, NAD+, Epithalon) are sold as research chemicals with no approved human indication — evidence quality varies widely within this bucket.</p>
+        </div>
+      </div>
+
+      <div class="notice-box">
+        <strong>What a Certificate of Analysis (COA) actually verifies:</strong> a COA confirms the identity and purity of a specific batch — that what's in the vial matches the label and is free of contaminants. It does not, by itself, establish clinical efficacy for a given use. Ask any supplier for the COA on the specific batch you're receiving, not just a general one for the product line.
+      </div>
+
+      <div class="cta-band">
+        <h3>Want the sourcing details, not just the science?</h3>
+        <p>See how these regulatory categories map to what Limitless BioLabs actually sources and verifies.</p>
+        <a href="index.html#physicians" class="btn btn-primary">See Our Sourcing</a>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+      <a href="index.html" class="wordmark"><img src="assets/logo-icon.png" alt="Limitless BioLabs" class="nav-logo">Limitless BioLabs</a>
+      <p class="footer-tagline">Rewrite Your Biology.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Programs</h5>
+          <ul>
+            <li><a href="index.html#individuals">Individuals</a></li>
+            <li><a href="index.html#medspas">MedSpas</a></li>
+            <li><a href="index.html#physicians">Physicians</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="find-your-protocol.html">Find Your Protocol</a></li>
+            <li><a href="see-the-science.html">See the Science</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Legal</h5>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Shipping &amp; Returns</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="disclaimer-box">
+      Placeholder site for planning purposes. Licensing details, pharmacy names, and legal pages shown here are illustrative and must be replaced with verified, attorney-reviewed content before this site goes live.
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Limitless BioLabs.</span>
+      <span>Baltimore, MD</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const links = document.querySelector('nav.links');
+  toggle.addEventListener('click', () => {
+    const isOpen = links.style.display === 'flex';
+    links.style.display = isOpen ? 'none' : 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'absolute';
+    links.style.top = '64px';
+    links.style.right = '32px';
+    links.style.background = '#161320';
+    links.style.border = '1px solid #29252F';
+    links.style.borderRadius = '10px';
+    links.style.padding = '16px 20px';
+    links.style.gap = '14px';
+  });
+</script>
+
+</body>
+</html>

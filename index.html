@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Limitless BioLabs — Rewrite Your Biology.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D0B10;
+    --bg-raised:#161320;
+    --bg-card:#18151F;
+    --ink:#F5F3F7;
+    --primary:#FF5F3E;      /* coral — energy, individuals */
+    --primary-dark:#E44B2C;
+    --secondary:#35D6C4;    /* bio-cyan — science, medspas */
+    --violet:#9B7BFF;       /* physicians */
+    --line:#29252F;
+    --muted:#9D97A8;
+    --white:#FFFFFF;
+    --display:'Space Grotesk', 'Arial Black', sans-serif;
+    --sans:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --max:1160px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit;}
+  img,svg{display:block; max-width:100%;}
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 32px;}
+
+  h1,h2,h3{
+    font-family:var(--display);
+    font-weight:700;
+    line-height:1.02;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  p{margin:0 0 16px 0; max-width:60ch;}
+  p:last-child{margin-bottom:0;}
+
+  .eyebrow-rule{display:flex; align-items:center; gap:10px; margin-bottom:14px;}
+  .eyebrow-rule .stub{width:28px; height:2px; background:var(--primary);}
+  .eyebrow-rule span{font-size:13.5px; color:var(--muted); font-weight:600; font-family:var(--sans);}
+
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--secondary);
+    outline-offset:3px;
+    border-radius:2px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(13,11,16,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:var(--max); margin:0 auto;}
+  .wordmark{
+    font-family:var(--display); font-size:20px; font-weight:700;
+    display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink);
+    letter-spacing:-0.01em;
+  }
+  .wordmark .mark{
+    width:26px; height:26px; border-radius:7px;
+    background:linear-gradient(135deg, var(--primary), var(--violet));
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:700; color:var(--bg);
+  }
+  nav.links{display:flex; gap:30px; align-items:center;}
+  nav.links a.navlink{
+    text-decoration:none; color:var(--ink); font-size:14.5px; font-weight:500;
+    padding-bottom:2px; border-bottom:1px solid transparent; transition:border-color .15s ease, color .15s ease;
+  }
+  nav.links a.navlink:hover{border-bottom-color:var(--secondary); color:var(--secondary);}
+  .btn{
+    display:inline-block; text-decoration:none; font-family:var(--sans); font-weight:600; font-size:14.5px;
+    padding:12px 22px; border-radius:6px; cursor:pointer; border:1px solid transparent;
+    transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary{background:var(--primary); color:var(--white); box-shadow:0 0 0 0 rgba(255,95,62,0);}
+  .btn-primary:hover{background:var(--primary-dark); box-shadow:0 4px 24px -6px rgba(255,95,62,0.55);}
+  .btn-ghost{background:transparent; color:var(--ink); border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--secondary); color:var(--secondary);}
+  .btn:active{transform:scale(0.98);}
+  .menu-toggle{display:none; background:none; border:none; cursor:pointer; padding:6px;}
+  .menu-toggle span{display:block; width:22px; height:2px; background:var(--ink); margin:5px 0;}
+
+  .nav-logo{height:30px; width:auto; display:block;}
+  .wordmark .mark{display:none;}
+
+  .brand-header{background:#FFFFFF; padding:22px 0; border-bottom:1px solid var(--line);}
+  .brand-header-inner{display:flex; justify-content:center; align-items:center;}
+  .brand-lockup{height:96px; width:auto;}
+  @media (max-width:600px){ .brand-lockup{height:72px;} }
+
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative; padding:100px 0 70px; overflow:hidden;}
+  .hero::before{
+    content:''; position:absolute; top:-220px; right:-180px; width:640px; height:640px; border-radius:50%;
+    background:conic-gradient(from 90deg, var(--primary), var(--violet), var(--secondary), var(--primary));
+    filter:blur(110px); opacity:0.35;
+    animation:orbit 16s linear infinite;
+    z-index:0;
+  }
+  @keyframes orbit{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+
+  .hero-inner{position:relative; z-index:1; opacity:0; transform:translateY(16px); animation:rise .8s ease forwards;}
+  @keyframes rise{ to{opacity:1; transform:translateY(0);} }
+
+  .hero-grid{display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:center;}
+  .hero h1{font-size:clamp(40px, 5.4vw, 66px); max-width:13ch; margin-bottom:22px;}
+  .hero h1 .accent{color:var(--primary);}
+  .hero .sub{font-size:18px; color:var(--muted); max-width:46ch; margin-bottom:32px;}
+  .hero .tagline{font-family:var(--display); font-size:15px; font-weight:600; text-transform:uppercase; letter-spacing:0.12em; color:var(--secondary); margin:0 0 18px 0;}
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:36px;}
+
+  .trust-inline{display:flex; gap:24px; flex-wrap:wrap; font-size:13.5px; color:var(--muted);}
+  .trust-inline .item{display:flex; align-items:center; gap:8px;}
+  .trust-inline svg{width:16px; height:16px; flex:none; color:var(--secondary);}
+
+  .stat-card{
+    background:var(--bg-card); border:1px solid var(--line); border-radius:10px; padding:26px;
+    display:flex; flex-direction:column; gap:18px;
+  }
+  .stat-row{display:flex; justify-content:space-between; align-items:baseline;}
+  .stat-num{font-family:var(--display); font-size:30px; font-weight:700; color:var(--secondary);}
+  .stat-label{font-size:12.5px; color:var(--muted); max-width:12ch; text-align:right;}
+
+  /* ---------- Trust strip ---------- */
+  .trust-strip{background:var(--bg-raised); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:26px 0;}
+  .trust-strip .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px;}
+  .trust-strip .row{display:flex; align-items:center; gap:10px; font-size:14px; font-weight:500;}
+  .trust-strip svg{width:19px; height:19px; color:var(--secondary); flex:none;}
+
+  /* ---------- Section shell ---------- */
+  section{padding:92px 0;}
+  section.tight{padding:64px 0;}
+
+  /* ---------- Pathways ---------- */
+  .path-row{display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px; align-items:center; padding:56px 0; border-bottom:1px solid var(--line);}
+  .path-row:last-child{border-bottom:none;}
+  .path-row.reverse{grid-template-columns:1.1fr 0.9fr;}
+  .path-row.reverse .path-text{order:2;}
+  .path-row.reverse .path-art{order:1;}
+
+  .path-tag{display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:14px;}
+  .path-row[data-c="primary"] .path-tag{color:var(--primary);}
+  .path-row[data-c="secondary"] .path-tag{color:var(--secondary);}
+  .path-row[data-c="violet"] .path-tag{color:var(--violet);}
+
+  .path-text h3{font-size:clamp(27px,3.2vw,36px); margin-bottom:14px; max-width:15ch;}
+  .path-text p{color:var(--muted); font-size:16px; margin-bottom:20px;}
+  .path-points{list-style:none; margin:0 0 26px; padding:0;}
+  .path-points li{display:flex; gap:10px; align-items:flex-start; font-size:15px; color:var(--ink); margin-bottom:11px;}
+  .path-points svg{width:16px; height:16px; margin-top:3px; flex:none;}
+  .path-row[data-c="primary"] .path-points svg{color:var(--primary);}
+  .path-row[data-c="secondary"] .path-points svg{color:var(--secondary);}
+  .path-row[data-c="violet"] .path-points svg{color:var(--violet);}
+
+  .path-art{
+    background:var(--bg-card); border:1px solid var(--line); border-radius:14px; padding:32px;
+    display:flex; align-items:center; justify-content:center; min-height:260px; position:relative; overflow:hidden;
+  }
+  .path-art::before{
+    content:''; position:absolute; inset:0; opacity:0.14;
+  }
+  .path-row[data-c="primary"] .path-art::before{background:radial-gradient(circle at 30% 30%, var(--primary), transparent 60%);}
+  .path-row[data-c="secondary"] .path-art::before{background:radial-gradient(circle at 30% 30%, var(--secondary), transparent 60%);}
+  .path-row[data-c="violet"] .path-art::before{background:radial-gradient(circle at 30% 30%, var(--violet), transparent 60%);}
+  .path-art svg{width:100%; height:auto; max-height:220px; position:relative; z-index:1;}
+
+  .path-art.path-photo{padding:0; overflow:hidden;}
+  .path-art.path-photo img{width:100%; height:100%; min-height:260px; object-fit:cover; display:block; position:relative; z-index:0;}
+  .path-row[data-c="primary"] .path-art.path-photo::before{background:linear-gradient(160deg, rgba(255,95,62,0.35), rgba(13,11,16,0.55)); z-index:1; opacity:1;}
+  .path-row[data-c="secondary"] .path-art.path-photo::before{background:linear-gradient(160deg, rgba(53,214,196,0.30), rgba(13,11,16,0.55)); z-index:1; opacity:1;}
+  .path-row[data-c="violet"] .path-art.path-photo::before{background:linear-gradient(160deg, rgba(155,123,255,0.32), rgba(13,11,16,0.55)); z-index:1; opacity:1;}
+
+
+  /* ---------- Goal categories ---------- */
+  .goals-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+  .goal-cell{background:var(--bg-card); padding:30px 24px; min-height:170px; display:flex; flex-direction:column; justify-content:space-between; transition:background .2s ease, transform .15s ease; text-decoration:none; color:var(--ink);}
+  .goal-cell:hover{background:var(--bg-raised); transform:translateY(-2px);}
+  .goal-cell svg{width:26px; height:26px; color:var(--secondary); margin-bottom:20px;}
+  .goal-cell h4{font-family:var(--display); font-size:19px; font-weight:700; margin:0 0 6px;}
+  .goal-cell span{font-size:13.5px; color:var(--muted); display:block;}
+  .goal-cell .goal-cta{font-size:12.5px; color:var(--primary); font-weight:600; margin-top:14px;}
+
+  /* ---------- Lead magnet ---------- */
+  .magnet{
+    background:linear-gradient(135deg, #1B1224, #150F1C 60%);
+    border:1px solid var(--line);
+    border-radius:16px; padding:56px;
+    display:grid; grid-template-columns:1.2fr 1fr; gap:48px; align-items:center;
+    position:relative; overflow:hidden;
+  }
+  .magnet::after{
+    content:''; position:absolute; bottom:-140px; left:-100px; width:360px; height:360px; border-radius:50%;
+    background:var(--primary); filter:blur(120px); opacity:0.25;
+  }
+  .magnet > *{position:relative; z-index:1;}
+  .magnet h2{color:var(--ink); font-size:clamp(26px,3vw,32px); max-width:16ch; margin-bottom:14px;}
+  .magnet p{color:var(--muted); font-size:15.5px;}
+  .magnet-form{background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:28px;}
+  .magnet-form .field{margin-bottom:14px;}
+  .magnet-form label{display:block; font-size:13px; font-weight:600; color:var(--ink); margin-bottom:6px;}
+  .magnet-form input, .magnet-form select{
+    width:100%; padding:11px 13px; font-family:var(--sans); font-size:14.5px;
+    border:1px solid var(--line); border-radius:6px; background:var(--bg-raised); color:var(--ink);
+  }
+  .magnet-form button{width:100%; justify-content:center; margin-top:4px;}
+  .form-note{font-size:12px; color:var(--muted); margin-top:12px;}
+  .form-success{display:none; background:var(--bg-raised); border:1px solid var(--secondary); border-radius:8px; padding:16px; font-size:14px; color:var(--ink);}
+  .form-success.show{display:block;}
+  .magnet-form form.hide{display:none;}
+
+  /* ---------- Contact ---------- */
+  .contact-shell{display:grid; grid-template-columns:0.85fr 1.15fr; gap:56px;}
+  .contact-copy h2{font-size:clamp(28px,3.4vw,36px); margin-bottom:16px; max-width:14ch;}
+  .contact-copy p{color:var(--muted); margin-bottom:24px;}
+  .contact-list{list-style:none; margin:0; padding:0;}
+  .contact-list li{padding:14px 0; border-top:1px solid var(--line); font-size:14.5px; color:var(--muted);}
+  .contact-list li:last-child{border-bottom:1px solid var(--line);}
+  .contact-list strong{color:var(--ink); display:block; font-weight:600; margin-bottom:2px; font-family:var(--display);}
+
+  .contact-form{background:var(--bg-card); border:1px solid var(--line); border-radius:14px; padding:36px;}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .contact-form .field{margin-bottom:16px;}
+  .contact-form label{display:block; font-size:13px; font-weight:600; margin-bottom:6px;}
+  .contact-form input, .contact-form select, .contact-form textarea{
+    width:100%; padding:11px 13px; font-family:var(--sans); font-size:14.5px;
+    border:1px solid var(--line); border-radius:6px; background:var(--bg-raised); color:var(--ink);
+  }
+  .contact-form textarea{resize:vertical; min-height:90px;}
+  .field-note{font-size:12px; color:var(--muted); margin:6px 0 0; max-width:none;}
+  .checkbox-label{display:flex !important; align-items:center; gap:9px; font-size:14px; color:var(--ink); cursor:pointer;}
+  .checkbox-label input{width:auto !important;}
+
+  /* ---------- Compliance ---------- */
+  .compliance{background:var(--bg-raised); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .compliance-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:40px;}
+  .compliance-grid h4{font-family:var(--display); font-size:18px; margin-bottom:8px; font-weight:700;}
+  .compliance-grid p{font-size:14px; color:var(--muted);}
+
+  /* ---------- Footer ---------- */
+  footer{padding:56px 0 36px;}
+  .footer-top{display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:32px; padding-bottom:32px; border-bottom:1px solid var(--line); margin-bottom:24px;}
+  .footer-cols{display:flex; gap:56px; flex-wrap:wrap;}
+  .footer-brand{display:flex; flex-direction:column;}
+  .footer-tagline{font-size:13px; color:var(--muted); margin:8px 0 0 0; font-weight:500;}
+  .footer-col h5{font-size:12.5px; font-weight:700; margin:0 0 12px; color:var(--muted); letter-spacing:0.03em; text-transform:uppercase;}
+  .footer-col ul{list-style:none; margin:0; padding:0;}
+  .footer-col li{margin-bottom:9px;}
+  .footer-col a{text-decoration:none; font-size:14.5px; color:var(--ink);}
+  .footer-col a:hover{color:var(--secondary);}
+  .footer-bottom{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:13px; color:var(--muted);}
+  .disclaimer-box{font-size:12.5px; color:var(--muted); max-width:none; margin-bottom:24px; padding:16px 18px; background:var(--bg-raised); border:1px solid var(--line); border-radius:8px;}
+
+  /* ---------- Responsive ---------- */
+
+  /* Partner Tiers */
+  .tiers-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .tier-card{background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:28px;}
+  .tier-featured{border-color:var(--primary); box-shadow:0 0 0 1px var(--primary);}
+  .tier-label{font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px;}
+  .tier-title{font-family:var(--display); font-size:21px; font-weight:700; margin:0 0 10px;}
+  .tier-desc{font-size:14px; color:var(--muted); margin-bottom:16px;}
+  .tier-list{list-style:none; margin:0; padding:0;}
+  .tier-list li{font-size:13.5px; color:var(--ink); padding:8px 0; border-top:1px solid var(--line);}
+
+  /* Testimonials */
+  .testimonial-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .testimonial-card{background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:26px;}
+  .testimonial-avatar{
+    width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-weight:700; font-size:14px; color:var(--bg); margin-bottom:16px;
+  }
+  .testimonial-quote{font-size:14.5px; color:var(--ink); margin-bottom:14px; font-style:italic;}
+  .testimonial-name{font-size:13px; color:var(--muted); font-weight:600;}
+
+  /* FAQ */
+  .faq-list{display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+  .faq-item{background:var(--bg-card); padding:18px 22px;}
+  .faq-item summary{
+    cursor:pointer; font-family:var(--display); font-weight:600; font-size:15.5px; color:var(--ink);
+    list-style:none; display:flex; justify-content:space-between; align-items:center;
+  }
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{content:'+'; font-size:20px; color:var(--secondary); margin-left:12px; flex:none;}
+  .faq-item[open] summary::after{content:'\2212';}
+  .faq-item p{margin-top:12px; font-size:14px; color:var(--muted);}
+
+  @media (max-width:880px){
+    .tiers-grid, .testimonial-grid{grid-template-columns:1fr;}
+  }
+
+
+  /* Peptide Library */
+  .lib-panel{background:var(--bg-card); border:1px solid var(--line); border-left-width:3px; border-radius:10px; padding:28px 30px; margin-bottom:20px; scroll-margin-top:90px;}
+  .lib-panel[data-c="primary"]{border-left-color:var(--primary);}
+  .lib-panel[data-c="secondary"]{border-left-color:var(--secondary);}
+  .lib-panel[data-c="violet"]{border-left-color:var(--violet);}
+  .lib-panel-head{display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:10px; margin-bottom:20px;}
+  .lib-panel-head h3{font-family:var(--display); font-size:22px; font-weight:700; margin:0;}
+  .lib-back{font-size:13px; color:var(--muted); text-decoration:none; font-weight:500;}
+  .lib-back:hover{color:var(--secondary);}
+  .lib-cols{display:grid; grid-template-columns:1fr 1fr; gap:32px;}
+  .lib-cols h5{font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); margin:0 0 12px;}
+  .lib-list{list-style:none; margin:0; padding:0;}
+  .lib-list li{padding:12px 0; border-top:1px solid var(--line);}
+  .lib-list li:first-child{border-top:none;}
+  .lib-name{display:block; font-weight:600; font-size:14.5px; color:var(--ink); margin-bottom:3px;}
+  .lib-blurb{display:block; font-size:13px; color:var(--muted); line-height:1.5;}
+
+  @media (max-width:880px){
+    .lib-cols{grid-template-columns:1fr;}
+  }
+
+  @media (max-width: 880px){
+    nav.links{display:none;}
+    .menu-toggle{display:block;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-art{order:-1;}
+    .path-row, .path-row.reverse{grid-template-columns:1fr; gap:28px;}
+    .path-row.reverse .path-text, .path-row.reverse .path-art{order:0;}
+    .goals-grid{grid-template-columns:repeat(2,1fr);}
+    .magnet{grid-template-columns:1fr; padding:32px;}
+    .contact-shell{grid-template-columns:1fr;}
+    .compliance-grid{grid-template-columns:1fr; gap:24px;}
+    .form-row{grid-template-columns:1fr;}
+    .footer-top{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="#top" class="wordmark"><img src="assets/logo-icon.png" alt="Limitless BioLabs" class="nav-logo">Limitless BioLabs</a>
+    <nav class="links">
+      <a class="navlink" href="#individuals">Individuals</a>
+      <a class="navlink" href="#medspas">MedSpas</a>
+      <a class="navlink" href="#physicians">Physicians</a>
+      <a class="navlink" href="#faq">FAQ</a>
+      <a href="#contact" class="btn btn-primary">Get Started</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="brand-header">
+  <div class="wrap brand-header-inner">
+    <img src="assets/logo-full.png" alt="Limitless BioLabs — Rewrite Your Biology" class="brand-lockup">
+  </div>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <div class="eyebrow-rule"><div class="stub"></div><span>Licensed 503A / 503B Sourcing</span></div>
+          <h1>Train harder. Recover faster. Age on <span class="accent">your</span> terms.</h1>
+          <p class="tagline">Rewrite Your Biology.</p>
+          <p class="sub">Limitless BioLabs connects you to American-sourced, American-compounded, and lab-verified peptide protocols — built for people actively pushing their performance, recovery, and longevity, at any age.</p>
+          <div class="hero-ctas">
+            <a href="find-your-protocol.html" class="btn btn-primary">Find Your Protocol</a>
+            <a href="see-the-science.html" class="btn btn-ghost">See the Science</a>
+          </div>
+          <div class="trust-inline">
+            <div class="item"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 2 3 5v5c0 4.2 3 7 7 8 4-1 7-3.8 7-8V5l-7-3Z"/><path d="M7 10l2 2 4-4"/></svg>503A &amp; 503B licensed</div>
+            <div class="item"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7.5"/><path d="M7 10l2 2 4-4.5"/></svg>COA on every batch</div>
+            <div class="item"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 2v3M10 15v3M2 10h3M15 10h3"/><circle cx="10" cy="10" r="4"/></svg>Physician-reviewed protocols</div>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="stat-card">
+            <div class="stat-row">
+              <div><div class="stat-num">3 Tracks</div></div>
+              <div class="stat-label">Individual, MedSpa &amp; Clinical programs</div>
+            </div>
+            <div class="stat-row">
+              <div><div class="stat-num">100%</div></div>
+              <div class="stat-label">Batches COA-verified before sale</div>
+            </div>
+            <div class="stat-row">
+              <div><div class="stat-num">Rx-Led</div></div>
+              <div class="stat-label">Every protocol provider-reviewed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <div class="trust-strip">
+    <div class="wrap">
+      <div class="row"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="14" height="12" rx="1.5"/><path d="M6 8h8M6 11h5"/></svg>Licensed pharmacy sourcing</div>
+      <div class="row"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2 3 5v5c0 4.2 3 7 7 8 4-1 7-3.8 7-8V5l-7-3Z"/></svg>Certificate of Analysis on request</div>
+      <div class="row"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="7" r="3.2"/><path d="M4 17c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/></svg>Provider-guided candidacy review</div>
+      <div class="row"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10h14M10 3v14"/></svg>Individual, MedSpa &amp; clinical programs</div>
+    </div>
+  </div>
+
+  <!-- PATHWAYS -->
+  <section id="pathways">
+    <div class="wrap">
+      <div class="eyebrow-rule"><div class="stub"></div><span>Three programs, one standard of sourcing</span></div>
+      <h2 style="font-size:clamp(28px,3.4vw,40px); max-width:20ch; margin-bottom:8px;">Built around how you'll actually use it.</h2>
+    </div>
+
+    <div class="wrap">
+
+      <div class="path-row" data-c="primary" id="individuals">
+        <div class="path-text">
+          <div class="path-tag">For Individuals</div>
+          <h3>Train Smarter. Recover Faster.</h3>
+          <p>A quick goal form connects you to a secure, provider-led intake — health questions are handled there, not on this site, and nothing ships until a licensed provider reviews your candidacy.</p>
+          <ul class="path-points">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-9"/></svg>Provider-reviewed intake before purchase</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-9"/></svg>Protocols for recovery, performance, sleep &amp; focus</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-9"/></svg>Lab-verified sourcing on every product</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary" onclick="setAudience('Individual')">Start My Protocol</a>
+        </div>
+        <div class="path-art path-photo">
+          <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1200&auto=format&fit=crop&q=80" alt="Athlete preparing to lift a barbell, representing performance and training" loading="lazy">
+        </div>
+      </div>
+
+      <div class="path-row reverse" data-c="secondary" id="medspas">
+        <div class="path-text">
+          <div class="path-tag">For MedSpas</div>
+          <h3>Your Highest-Margin New Service Line.</h3>
+          <p>Tiered offerings built to slot into a menu you're already running — with staff talking points and client-facing materials included, not just a product list.</p>
+          <ul class="path-points">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-9"/></svg>Menu Add-On, Signature Service &amp; Flagship tiers</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-9"/></svg>Staff-ready talking points included</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-9"/></svg>60–90 day pilot, no large upfront commitment</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary" onclick="setAudience('MedSpa')">Request Partner Info</a>
+        </div>
+        <div class="path-art path-photo">
+          <img src="https://images.unsplash.com/photo-1785861001619-b263ebd4e615?w=1200&auto=format&fit=crop&q=80" alt="Professional consulting with a client in a modern medical office" loading="lazy">
+        </div>
+      </div>
+
+      <div class="path-row" data-c="violet" id="physicians">
+        <div class="path-text">
+          <div class="path-tag">For Physicians</div>
+          <h3>Diversify Without the Compliance Load.</h3>
+          <p>Verifiable licensing, transparent pharmacy relationships, and protocol support — built for practices adding peptide therapy without building compliance infrastructure from scratch.</p>
+          <ul class="path-points">
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-9"/></svg>Verifiable pharmacy relationships — Stryker Pharmacy (503A) and licensed 503B partners</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-9"/></svg>Clinical reference materials for your team</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-9"/></svg>Direct line to pharmacy compliance documentation</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary" onclick="setAudience('Physician')">Request Information</a>
+        </div>
+        <div class="path-art path-photo">
+          <img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=1200&auto=format&fit=crop&q=80" alt="Physician talking with a patient in a clinical setting" loading="lazy">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PARTNER TIERS -->
+  <section class="tight" id="tiers">
+    <div class="wrap">
+      <div class="eyebrow-rule"><div class="stub"></div><span>MedSpa partner program</span></div>
+      <h2 style="font-size:clamp(26px,3.2vw,34px); margin-bottom:32px; max-width:22ch;">Three tiers, one path to your highest-margin service line.</h2>
+      <div class="tiers-grid">
+        <div class="tier-card">
+          <div class="tier-label" style="color:var(--secondary);">Tier 1</div>
+          <h3 class="tier-title">Menu Add-On</h3>
+          <p class="tier-desc">Fits directly into IV or injectable services you already run. Minimal client education needed.</p>
+          <ul class="tier-list">
+            <li>NAD+ IV/IM boost</li>
+            <li>GHK-Cu copper peptide</li>
+            <li>Positioned as an add-on, not a new decision</li>
+          </ul>
+        </div>
+        <div class="tier-card tier-featured">
+          <div class="tier-label" style="color:var(--primary);">Tier 2</div>
+          <h3 class="tier-title">Signature Service</h3>
+          <p class="tier-desc">A standalone recovery-and-glow protocol, branded as your own — not sold as a commodity clients can price-shop.</p>
+          <ul class="tier-list">
+            <li>GHK-Cu + BPC-157 + TB-500 blend</li>
+            <li>Ready-to-use or multi-session protocol formats</li>
+            <li>Client-facing materials included</li>
+          </ul>
+        </div>
+        <div class="tier-card">
+          <div class="tier-label" style="color:var(--violet);">Tier 3</div>
+          <h3 class="tier-title">Flagship Program</h3>
+          <p class="tier-desc">Your highest-revenue offering — requires a prescribing medical director on staff or contract.</p>
+          <ul class="tier-list">
+            <li>Tirzepatide / Semaglutide weight-management program</li>
+            <li>Full provider-led intake and follow-up</li>
+            <li>60–90 day pilot structure available</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOAL CATEGORIES -->
+  <section class="tight" style="background:var(--bg-raised); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="eyebrow-rule"><div class="stub"></div><span>Browse by goal</span></div>
+      <h2 style="font-size:clamp(24px,3vw,30px); margin-bottom:32px; max-width:20ch;">Organized around outcomes, not SKUs.</h2>
+    </div>
+    <div class="wrap" style="padding:0 32px;">
+      <div class="goals-grid">
+        <a href="#lib-fatloss" class="goal-cell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 18c2-8 6-12 8-12s6 4 8 12"/><path d="M8 18h8"/></svg>
+          <div><h4>Fat Loss &amp; Metabolism</h4><span>GLP-1 &amp; metabolic protocols</span><span class="goal-cta">View peptides &amp; stacks &rarr;</span></div>
+        </a>
+        <a href="#lib-recovery" class="goal-cell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.4-9.5-9C0.8 8 3 4 7 4c2 0 4 1.2 5 3 1-1.8 3-3 5-3 4 0 6.2 4 4.5 8-2.5 4.6-9.5 9-9.5 9Z"/></svg>
+          <div><h4>Recovery &amp; Performance</h4><span>Tissue &amp; joint support</span><span class="goal-cta">View peptides &amp; stacks &rarr;</span></div>
+        </a>
+        <a href="#lib-longevity" class="goal-cell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <div><h4>Longevity</h4><span>Cellular &amp; anti-aging support</span><span class="goal-cta">View peptides &amp; stacks &rarr;</span></div>
+        </a>
+        <a href="#lib-focus" class="goal-cell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3a5 5 0 0 0-5 5c0 2 1 3 1 5v2h8v-2c0-2 1-3 1-5a5 5 0 0 0-5-5Z"/><line x1="10" y1="19" x2="14" y2="19"/></svg>
+          <div><h4>Focus &amp; Mood</h4><span>Cognitive support</span><span class="goal-cta">View peptides &amp; stacks &rarr;</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PEPTIDE LIBRARY -->
+  <section class="tight" id="peptide-library">
+    <div class="wrap">
+      <div class="eyebrow-rule"><div class="stub"></div><span>Peptide library</span></div>
+      <h2 style="font-size:clamp(26px,3.2vw,34px); margin-bottom:12px; max-width:24ch;">Individual peptides and stacks, organized by goal.</h2>
+      <p style="color:var(--muted); font-size:14.5px; margin-bottom:40px; max-width:60ch;">Candidacy and dosing are reviewed by a licensed provider as part of intake — this is an educational overview, not a self-directed protocol.</p>
+
+      <div class="lib-panel" id="lib-fatloss" data-c="primary">
+        <div class="lib-panel-head">
+          <h3>Fat Loss &amp; Metabolism</h3>
+          <a href="#pathways" class="lib-back">&larr; Browse by goal</a>
+        </div>
+        <div class="lib-cols">
+          <div>
+            <h5>Individual Peptides</h5>
+            <ul class="lib-list">
+              <li><span class="lib-name">Semaglutide</span><span class="lib-blurb">GLP-1 receptor agonist; appetite suppression and weight management. FDA-approved.</span></li>
+              <li><span class="lib-name">Tirzepatide</span><span class="lib-blurb">GLP-1/GIP dual agonist; stronger average weight-loss profile. FDA-approved.</span></li>
+              <li><span class="lib-name">AOD-9604</span><span class="lib-blurb">Modified HGH fragment associated with fat metabolism.</span></li>
+              <li><span class="lib-name">MOTS-c</span><span class="lib-blurb">Mitochondrial-derived peptide supporting metabolic resilience.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h5>Stacks</h5>
+            <ul class="lib-list">
+              <li><span class="lib-name">GLP-1 + Ipamorelin</span><span class="lib-blurb">Pairs GLP-1-driven weight loss with a GH secretagogue to help offset lean-mass loss.</span></li>
+              <li><span class="lib-name">Tesamorelin-Led Program</span><span class="lib-blurb">Visceral-fat-focused, muscle-preserving alternative to a GLP-1-led approach.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="lib-panel" id="lib-recovery" data-c="secondary">
+        <div class="lib-panel-head">
+          <h3>Recovery &amp; Performance</h3>
+          <a href="#pathways" class="lib-back">&larr; Browse by goal</a>
+        </div>
+        <div class="lib-cols">
+          <div>
+            <h5>Individual Peptides</h5>
+            <ul class="lib-list">
+              <li><span class="lib-name">BPC-157</span><span class="lib-blurb">Associated with tendon, muscle, and gut-lining recovery support.</span></li>
+              <li><span class="lib-name">TB-500</span><span class="lib-blurb">Associated with flexibility and soft-tissue recovery support.</span></li>
+              <li><span class="lib-name">GHK-Cu</span><span class="lib-blurb">Copper peptide associated with collagen and tissue support.</span></li>
+              <li><span class="lib-name">CJC-1295 / Ipamorelin</span><span class="lib-blurb">GH secretagogues associated with recovery and lean-mass support.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h5>Stacks</h5>
+            <ul class="lib-list">
+              <li><span class="lib-name">Recovery Stack</span><span class="lib-blurb">BPC-157 + TB-500 — combined soft-tissue repair support.</span></li>
+              <li><span class="lib-name">GLOW / KLOW</span><span class="lib-blurb">GHK-Cu + BPC-157 + TB-500 (KLOW adds KPV) — blended recovery-and-skin protocol.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="lib-panel" id="lib-longevity" data-c="violet">
+        <div class="lib-panel-head">
+          <h3>Longevity</h3>
+          <a href="#pathways" class="lib-back">&larr; Browse by goal</a>
+        </div>
+        <div class="lib-cols">
+          <div>
+            <h5>Individual Peptides</h5>
+            <ul class="lib-list">
+              <li><span class="lib-name">NAD+</span><span class="lib-blurb">Coenzyme central to cellular energy production and DNA repair.</span></li>
+              <li><span class="lib-name">Epithalon</span><span class="lib-blurb">Studied for potential telomerase-activity and circadian-regulation effects.</span></li>
+              <li><span class="lib-name">GHK-Cu</span><span class="lib-blurb">Structural/collagen support relevant to visible aging.</span></li>
+              <li><span class="lib-name">MOTS-c</span><span class="lib-blurb">Mitochondrial signaling support at the cellular level.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h5>Stacks</h5>
+            <ul class="lib-list">
+              <li><span class="lib-name">Cellular Energy Stack</span><span class="lib-blurb">NAD+ + MOTS-c — coenzyme restoration paired with mitochondrial signaling support.</span></li>
+              <li><span class="lib-name">Telomere &amp; Longevity Stack</span><span class="lib-blurb">Epithalon + NAD+ — a foundational cellular-aging pairing.</span></li>
+              <li><span class="lib-name">Comprehensive Anti-Aging Protocol</span><span class="lib-blurb">NAD+ + Epithalon + GHK-Cu — a bundled three-part longevity protocol.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="lib-panel" id="lib-focus" data-c="primary">
+        <div class="lib-panel-head">
+          <h3>Focus &amp; Mood</h3>
+          <a href="#pathways" class="lib-back">&larr; Browse by goal</a>
+        </div>
+        <div class="lib-cols">
+          <div>
+            <h5>Individual Peptides</h5>
+            <ul class="lib-list">
+              <li><span class="lib-name">Semax</span><span class="lib-blurb">Nootropic peptide associated with focus and BDNF support.</span></li>
+              <li><span class="lib-name">Selank</span><span class="lib-blurb">Anxiolytic peptide from the same family as Semax.</span></li>
+              <li><span class="lib-name">DSIP</span><span class="lib-blurb">Associated with sleep-architecture support.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h5>Stacks</h5>
+            <ul class="lib-list">
+              <li><span class="lib-name">Cognitive Stack</span><span class="lib-blurb">Semax + Selank — focus support paired with anxiety reduction.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="tight">
+    <div class="wrap">
+      <div class="eyebrow-rule"><div class="stub"></div><span>What partners say</span></div>
+      <h2 style="font-size:clamp(24px,3vw,30px); margin-bottom:8px; max-width:20ch;">Illustrative feedback — placeholders pending real client quotes.</h2>
+      <p style="color:var(--muted); font-size:14px; margin-bottom:32px;">These cards are structured and ready — swap in real testimonials as they come in.</p>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg, var(--primary), var(--violet));">JM</div>
+          <p class="testimonial-quote">"The intake process made it easy to feel confident I was getting a protocol suited to my goals, not a one-size-fits-all order."</p>
+          <div class="testimonial-name">J. M. — Individual client</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg, var(--secondary), var(--primary));">SL</div>
+          <p class="testimonial-quote">"The Signature Service tier slotted straight into our existing menu. Clients ask for it by name now."</p>
+          <div class="testimonial-name">S. L. — MedSpa owner</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg, var(--violet), var(--secondary));">DR</div>
+          <p class="testimonial-quote">"Having verifiable pharmacy documentation up front made this an easy addition to the practice."</p>
+          <div class="testimonial-name">Dr. R. — Physician partner</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEAD MAGNET -->
+  <section id="resources">
+    <div class="wrap">
+      <div class="magnet">
+        <div>
+          <h2>The Peptide Buyer's Guide — what to ask before you start.</h2>
+          <p>A plain-language reference covering common peptides and stacks, what they're used for, and the sourcing questions worth asking any provider or supplier. Sent straight to your inbox.</p>
+        </div>
+        <div class="magnet-form">
+          <form id="leadForm">
+            <div class="field">
+              <label for="lm-email">Email address</label>
+              <input id="lm-email" type="email" required placeholder="you@email.com">
+            </div>
+            <div class="field">
+              <label for="lm-role">I am a...</label>
+              <select id="lm-role">
+                <option>Individual</option>
+                <option>MedSpa</option>
+                <option>Physician / Provider</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Me the Guide</button>
+          </form>
+          <div class="form-success" id="leadSuccess">You're in — check your inbox for the guide shortly.</div>
+          <p class="form-note">No spam. Unsubscribe anytime. This form is a design placeholder and is not yet connected to a live mailing list.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="tight" id="faq">
+    <div class="wrap">
+      <div class="eyebrow-rule"><div class="stub"></div><span>Frequently asked</span></div>
+      <h2 style="font-size:clamp(26px,3.2vw,34px); margin-bottom:32px; max-width:20ch;">Questions worth asking before you start.</h2>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Is this legal?</summary>
+          <p>Products are sourced through Stryker Pharmacy (503A) and licensed 503B outsourcing facilities. Licensing documentation is available on request — we'd encourage you to verify it independently rather than take our word for it.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Do I need a prescription?</summary>
+          <p>Most products require a licensed provider's review before dispensing. Our intake process connects you with a provider who evaluates candidacy — this isn't a self-checkout process.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How do I know the sourcing is safe?</summary>
+          <p>Every batch is tied to a Certificate of Analysis (COA) confirming identity and purity. Ask for the COA on any product before use — any legitimate supplier should provide one.</p>
+        </details>
+        <details class="faq-item">
+          <summary>I'm new to peptides — where do I start?</summary>
+          <p>Start with the intake, not a product. A licensed provider reviewing your goals will point you to the right starting protocol rather than you having to guess from a catalog.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What does a MedSpa partnership actually involve?</summary>
+          <p>A short partner call to review tiers and fit, a 60–90 day pilot with 2–3 SKUs, and staff-ready materials so your team isn't improvising the pitch to clients.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What does a physician need to get started?</summary>
+          <p>Verifiable pharmacy licensing and relationship documentation, plus clinical reference materials for your team. No compliance infrastructure to build from scratch on your end.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="tight">
+    <div class="wrap contact-shell">
+      <div class="contact-copy">
+        <div class="eyebrow-rule"><div class="stub"></div><span>Get in touch</span></div>
+        <h2>Tell us where you're starting from.</h2>
+        <p>Every inquiry routes to a real conversation — not an autoresponder. Select who you are below and we'll follow up with the right next step.</p>
+        <ul class="contact-list">
+          <li><strong>Individuals</strong>A quick goal form here, then a secure intake with your provider — no health questions on this site.</li>
+          <li><strong>MedSpas</strong>A partner call to walk through tiers, pricing, and a pilot structure. Check the box below for our catalog.</li>
+          <li><strong>Physicians</strong>Licensing documentation and a direct line to pharmacy compliance. Check the box below for our catalog.</li>
+        </ul>
+      </div>
+      <div class="contact-form">
+        <form id="contactForm">
+          <div class="form-row">
+            <div class="field">
+              <label for="c-name">Name</label>
+              <input id="c-name" type="text" required>
+            </div>
+            <div class="field">
+              <label for="c-email">Email</label>
+              <input id="c-email" type="email" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="c-role">I am a...</label>
+            <select id="c-role">
+              <option>Individual</option>
+              <option>MedSpa</option>
+              <option>Physician / Provider</option>
+            </select>
+          </div>
+          <div class="field" id="goal-field-wrap" style="display:none;">
+            <label for="c-goal">What's the main thing you're hoping to address?</label>
+            <select id="c-goal">
+              <option>Recovery</option>
+              <option>Performance</option>
+              <option>Sleep</option>
+              <option>Focus</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="c-message">What are you looking for?</label>
+            <textarea id="c-message" placeholder="A few sentences on your goals or your practice/spa..."></textarea>
+            <p class="field-note">Please don't include medical details here — health questions are handled during a secure intake with your provider, not on this site.</p>
+          </div>
+          <div class="field" id="catalog-field-wrap" style="display:none;">
+            <label class="checkbox-label"><input type="checkbox" id="c-catalog"> Send me your product &amp; pricing catalog</label>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Submit Inquiry</button>
+        </form>
+        <div class="form-success" id="contactSuccess">Thanks — we'll follow up within one business day.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPLIANCE -->
+  <section class="tight compliance">
+    <div class="wrap">
+      <div class="compliance-grid">
+        <div>
+          <h4>Sourced through licensed pharmacies</h4>
+          <p>Compounded products are sourced through Stryker Pharmacy (503A) and licensed 503B outsourcing facilities. Licensing documentation is available on request.</p>
+        </div>
+        <div>
+          <h4>Not all claims are FDA-evaluated</h4>
+          <p>Many products discussed are compounded preparations and have not been individually evaluated by the FDA for the uses described. This site does not make disease-treatment claims.</p>
+        </div>
+        <div>
+          <h4>Provider-led, not self-directed</h4>
+          <p>Dosing, candidacy, and treatment decisions are made by a licensed provider — this site is educational and does not replace individualized medical advice.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+      <a href="#top" class="wordmark"><img src="assets/logo-icon.png" alt="Limitless BioLabs" class="nav-logo">Limitless BioLabs</a>
+      <p class="footer-tagline">Rewrite Your Biology.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Programs</h5>
+          <ul>
+            <li><a href="#individuals">Individuals</a></li>
+            <li><a href="#medspas">MedSpas</a></li>
+            <li><a href="#physicians">Physicians</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="find-your-protocol.html">Find Your Protocol</a></li>
+            <li><a href="see-the-science.html">See the Science</a></li>
+            <li><a href="#resources">Resources</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Legal</h5>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Shipping &amp; Returns</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="disclaimer-box">
+      Placeholder site for planning purposes. Licensing details, pharmacy names, and legal pages shown here are illustrative and must be replaced with verified, attorney-reviewed content before this site goes live.
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Limitless BioLabs.</span>
+      <span>Baltimore, MD</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const links = document.querySelector('nav.links');
+  toggle.addEventListener('click', () => {
+    const isOpen = links.style.display === 'flex';
+    links.style.display = isOpen ? 'none' : 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'absolute';
+    links.style.top = '64px';
+    links.style.right = '32px';
+    links.style.background = '#161320';
+    links.style.border = '1px solid #29252F';
+    links.style.borderRadius = '10px';
+    links.style.padding = '16px 20px';
+    links.style.gap = '14px';
+  });
+
+  function setAudience(role){
+    const map = { 'Individual':'Individual', 'MedSpa':'MedSpa', 'Physician':'Physician / Provider' };
+    document.getElementById('c-role').value = map[role] || role;
+    updateFieldVisibility();
+  }
+
+  function updateFieldVisibility(){
+    const role = document.getElementById('c-role').value;
+    const goalWrap = document.getElementById('goal-field-wrap');
+    const catalogWrap = document.getElementById('catalog-field-wrap');
+    if (role === 'Individual') {
+      goalWrap.style.display = '';
+      catalogWrap.style.display = 'none';
+    } else {
+      goalWrap.style.display = 'none';
+      catalogWrap.style.display = '';
+    }
+  }
+  document.getElementById('c-role').addEventListener('change', updateFieldVisibility);
+  updateFieldVisibility();
+
+  document.getElementById('leadForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    this.classList.add('hide');
+    document.getElementById('leadSuccess').classList.add('show');
+  });
+
+  // Google Sheets lead-capture endpoint.
+  // After deploying google-apps-script.gs as a Web App (see setup
+  // instructions in that file), paste the Web App URL below.
+  const SHEET_ENDPOINT = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+  document.getElementById('contactForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const role = document.getElementById('c-role').value;
+    const goalField = document.getElementById('c-goal');
+    const goal = (goalField && goalField.closest('.field').style.display !== 'none') ? goalField.value : '';
+    const wantsCatalog = document.getElementById('c-catalog') && document.getElementById('c-catalog').checked;
+    const successEl = document.getElementById('contactSuccess');
+
+    const payload = new URLSearchParams({
+      name: document.getElementById('c-name').value,
+      email: document.getElementById('c-email').value,
+      role: role,
+      goal: goal,
+      message: document.getElementById('c-message').value,
+      catalog: wantsCatalog ? 'yes' : 'no'
+    });
+
+    if (SHEET_ENDPOINT && SHEET_ENDPOINT !== "PASTE_YOUR_WEB_APP_URL_HERE") {
+      // no-cors: Apps Script Web Apps don't return CORS headers, so the
+      // response can't be read here — this sends the data and we show
+      // a success message optimistically rather than waiting to parse a reply.
+      fetch(SHEET_ENDPOINT, { method: 'POST', mode: 'no-cors', body: payload })
+        .catch(() => { /* fail silently; submission may still have gone through */ });
+    } else {
+      console.warn('SHEET_ENDPOINT is not set — form data was not sent anywhere. See google-apps-script.gs for setup.');
+    }
+
+    if (role === 'Individual') {
+      successEl.textContent = "Thanks — check your email for a secure link to complete your intake with our provider partner.";
+    } else if (wantsCatalog) {
+      successEl.textContent = "Thanks — we'll follow up within one business day, and your catalog is on its way to your inbox.";
+    } else {
+      successEl.textContent = "Thanks — we'll follow up within one business day.";
+    }
+    this.style.display = 'none';
+    successEl.classList.add('show');
+  });
+</script>
+
+</body>
+</html>
